@@ -2,7 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff" id="theme-color">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="THC Calc">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="manifest" href="manifest.webmanifest">
   <title>THC Calculator</title>
   <meta name="description" content="Convert milligrams of THC to grams of cannabis flower (and back) using the flower's THC potency.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23222'/%3E%3Ctext x='16' y='22' font-family='Arial,sans-serif' font-size='16' font-weight='700' fill='%23fff' text-anchor='middle'%3Emg%3C/text%3E%3C/svg%3E">
@@ -15,6 +23,8 @@
         t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       }
       document.documentElement.setAttribute('data-theme', t);
+      var m = document.getElementById('theme-color');
+      if (m) m.setAttribute('content', t === 'dark' ? '#141414' : '#ffffff');
     })();
   </script>
   <link rel="stylesheet" href="style.css">
@@ -37,7 +47,7 @@
       <div class="field">
         <label for="amount" id="amount-label">Total THC</label>
         <div class="input">
-          <input id="amount" name="amount" type="text" inputmode="decimal" placeholder="15,000" aria-describedby="amount-msg">
+          <input id="amount" name="amount" type="text" inputmode="decimal" enterkeyhint="next" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="15,000" aria-describedby="amount-msg">
           <span class="unit" id="amount-unit">mg</span>
         </div>
         <p class="msg" id="amount-msg" aria-live="polite"></p>
@@ -46,14 +56,14 @@
       <div class="field">
         <label for="potency">THC potency</label>
         <div class="input">
-          <input id="potency" name="potency" type="text" inputmode="decimal" placeholder="25" aria-describedby="potency-msg">
+          <input id="potency" name="potency" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="25" aria-describedby="potency-msg">
           <span class="unit">%</span>
         </div>
         <p class="msg" id="potency-msg" aria-live="polite"></p>
       </div>
     </form>
 
-    <section class="result" aria-live="polite" aria-atomic="true">
+    <section class="result" id="result" aria-live="polite" aria-atomic="true">
       <p class="result-label" id="result-label">Grams of flower</p>
       <p class="result-value" id="result-value">&ndash;</p>
       <div class="working" id="working"></div>

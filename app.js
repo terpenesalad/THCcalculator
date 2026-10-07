@@ -237,6 +237,8 @@
   els.theme.addEventListener('click', function () {
     var next = currentTheme() === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
+    var meta = document.getElementById('theme-color');
+    if (meta) meta.setAttribute('content', next === 'dark' ? '#141414' : '#ffffff');
     try { localStorage.setItem('theme', next); } catch (e) {}
     paintThemeButton();
   });
@@ -245,6 +247,21 @@
   els.amount.addEventListener('input', render);
   els.potency.addEventListener('input', render);
   els.form.addEventListener('submit', function (e) { e.preventDefault(); });
+
+  // Phone keyboards: "Next" on the amount moves to potency; "Done" on potency
+  // closes the keyboard and brings the result into view.
+  els.amount.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); els.potency.focus(); }
+  });
+  els.potency.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    els.potency.blur();
+    var r = document.getElementById('result');
+    if (r && r.getBoundingClientRect().bottom > window.innerHeight) {
+      r.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
 
   els.tabs.forEach(function (tab, i) {
     tab.addEventListener('click', function () {
