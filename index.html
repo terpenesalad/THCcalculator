@@ -36,11 +36,17 @@
       <button type="button" id="theme" class="theme-btn" aria-label="Switch to dark mode">Dark</button>
     </header>
 
-    <p class="lede">Convert a THC amount in milligrams to grams of dried flower, or the other way round. You need the flower's THC potency (%) from the product label.</p>
+    <p class="lede">Convert a THC amount in milligrams to grams of flower or concentrate, or a number of edible pieces, and back again. You need the THC strength from the product label.</p>
+
+    <div class="products" role="tablist" aria-label="Product type">
+      <button type="button" role="tab" aria-selected="true" data-product="flower">Flower</button>
+      <button type="button" role="tab" aria-selected="false" data-product="concentrate">Hash / concentrate</button>
+      <button type="button" role="tab" aria-selected="false" data-product="edible">Edibles</button>
+    </div>
 
     <div class="modes" role="tablist" aria-label="Conversion direction">
-      <button type="button" role="tab" id="tab-mg" aria-selected="true" data-mode="mg-to-g">mg THC &rarr; grams</button>
-      <button type="button" role="tab" id="tab-g" aria-selected="false" data-mode="g-to-mg">grams &rarr; mg THC</button>
+      <button type="button" role="tab" aria-selected="true" data-dir="to" id="dir-to">mg THC &rarr; grams</button>
+      <button type="button" role="tab" aria-selected="false" data-dir="from" id="dir-from">grams &rarr; mg THC</button>
     </div>
 
     <form id="calc" class="calc" novalidate autocomplete="off">
@@ -54,12 +60,21 @@
       </div>
 
       <div class="field">
-        <label for="potency">THC potency</label>
+        <label for="potency" id="potency-label">THC potency</label>
         <div class="input">
           <input id="potency" name="potency" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="25" aria-describedby="potency-msg">
-          <span class="unit">%</span>
+          <span class="unit" id="potency-unit">%</span>
         </div>
         <p class="msg" id="potency-msg" aria-live="polite"></p>
+      </div>
+
+      <div class="field" id="days-field" hidden>
+        <label for="days">Period</label>
+        <div class="input">
+          <input id="days" name="days" type="text" inputmode="numeric" enterkeyhint="done" autocomplete="off" autocorrect="off" spellcheck="false" value="30" aria-describedby="days-msg">
+          <span class="unit">days</span>
+        </div>
+        <p class="msg" id="days-msg" aria-live="polite"></p>
       </div>
     </form>
 

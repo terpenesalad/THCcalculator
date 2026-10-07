@@ -1,6 +1,6 @@
 # THC Calculator
 
-A small web calculator that converts a THC amount in milligrams to grams of dried cannabis flower, and back, using the flower's THC potency.
+A small web calculator that converts a THC amount in milligrams to grams of flower or hash/concentrate, or a number of edible pieces, and back again.
 
 **Live site:** https://terpenesalad.github.io/THCcalculator/
 
@@ -20,14 +20,27 @@ Total THC (mg)      = grams of flower × THC per gram (mg)
 
 The result covers the same period as the amount entered (15,000 mg per month at 25% is 60 g per month).
 
+Hash and concentrates use the same formula, just with higher potencies (e.g. 15,000 mg at 70% = 21.4 g).
+
+Edibles:
+
+```
+Pieces          = total THC (mg) ÷ mg THC per piece
+mg THC per day  = total THC (mg) ÷ days in the period
+```
+
+The calculator flags edible amounts above **40 mg THC per day**. That limit is set in one place, `EDIBLE_DAILY_LIMIT_MG` at the top of `app.js`, if it ever needs changing.
+
 ## Features
 
-- mg THC → grams of flower, and grams → mg THC
+- Flower, hash/concentrate and edibles
+- mg THC → grams (or pieces), and back
+- Edibles: works out mg per day over a period and warns above 40 mg/day
 - Shows the working for each calculation
 - Accepts input like `15,000`, `15000mg` or `25%`
 - Light and dark mode (remembers your choice)
 - Built for phones as well as desktop: adapts to any screen size, finger-sized buttons, number keypad on iPhone and Android, and can be added to the home screen like an app
-- The address bar keeps the current inputs, so a calculation can be shared as a link, e.g. `?amount=15000&potency=25`
+- The address bar keeps the current inputs, so a calculation can be shared as a link, e.g. `?amount=15000&potency=25` or `?type=edible&amount=1200&potency=10`
 - Plain HTML, CSS and JavaScript. No build step, no tracking
 
 ## Running locally

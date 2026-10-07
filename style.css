@@ -93,6 +93,33 @@ button, input {
   outline-offset: 2px;
 }
 
+/* Product type */
+.products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 16px;
+}
+
+.products button {
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  padding: 10px 4px;
+  font-size: 0.9375rem;
+  color: var(--muted);
+  line-height: 1.25;
+}
+
+.products button:hover { color: var(--fg); }
+
+.products button[aria-selected="true"] {
+  color: var(--fg);
+  font-weight: 600;
+  border-bottom-color: var(--fg);
+}
+
 /* Mode switch */
 .modes {
   display: grid;
@@ -217,6 +244,18 @@ button, input {
 
 .working p { margin: 0; }
 
+.working .alert {
+  margin-top: 8px;
+  padding-left: 10px;
+  border-left: 3px solid var(--error);
+  color: var(--error);
+  font-weight: 600;
+}
+
+.working .ok { margin-top: 8px; }
+
+.field[hidden] { display: none; }
+
 /* Formula */
 .formula {
   margin: 0 0 24px;
@@ -243,6 +282,7 @@ button, input {
   /* Comfortable touch targets (44px minimum) */
   .theme-btn { min-height: 44px; min-width: 64px; padding: 8px 14px; font-size: 0.9375rem; }
   .modes { margin-bottom: 20px; }
+  .products button { min-height: 48px; font-size: 0.875rem; }
   .modes button { min-height: 48px; font-size: 0.9375rem; }
   .input input { min-height: 52px; font-size: 1.25rem; }
   .unit { padding: 0 10px; }
@@ -264,5 +304,6 @@ button, input {
 @media (pointer: coarse) {
   .theme-btn { min-height: 44px; min-width: 64px; }
   .modes button { min-height: 48px; }
+  .products button { min-height: 48px; }
   .input input { min-height: 52px; }
 }
