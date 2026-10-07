@@ -138,13 +138,34 @@
     return fmt(n) + ' g';
   }
 
-  function formatMg(n) { return fmt(n, 1) + ' mg'; }
+  function formatMg(n) { return fmt(n, 1) + '\u00A0mg'; }
 
   function addLine(text, cls) {
     var el = document.createElement('p');
     el.textContent = text;
     if (cls) el.className = cls;
     els.working.appendChild(el);
+  }
+
+  // Things like grams, packs and pieces can only be dispensed in whole units.
+  // Returns the nearest whole number plus a line with both rounding options
+  // and the mg each one actually comes to.
+  function wholeOptions(exact, mgPerUnit, label, flag) {
+    var nearest = Math.round(exact);
+    if (Math.abs(exact - nearest) < 1e-9) return { value: nearest, line: null };
+    var lo = Math.floor(exact);
+    var hi = Math.ceil(exact);
+    var opt = function (n) {
+      var mg = n * mgPerUnit;
+      return label(n) + ' (' + formatMg(mg) + (flag ? flag(mg) : '') + ')';
+    };
+    var line = 'Exact: ' + label(exact) + '. ' + (lo > 0
+      ? 'Round down to ' + opt(lo) + ' or up to ' + opt(hi) + '.'
+      : 'Round up to ' + opt(hi) + '.');
+    var value = nearest > 0 ? nearest : hi;
+    // If rounding to the nearest goes over a limit but rounding down doesn't, suggest rounding down.
+    if (flag && value === hi && lo > 0 && flag(hi * mgPerUnit) && !flag(lo * mgPerUnit)) value = lo;
+    return { value: value, line: line };
   }
 
   function checkStrength(p, field) {
@@ -217,14 +238,31 @@
       }
     }
 
+    if (dir === 'to') {
+      els.resultLabel.textContent = product === 'concentrate' && packOk
+        ? 'Packs of ' + fmt(k.value, 2) + ' g'
+        : cfg.resultLabel;
+    }
+
     els.working.innerHTML = '';
     if (amountOk && potencyOk) {
-      var totalMg, out;
+      var totalMg, out, rounded;
+      var dayFlag = null;
+      if (isEdible && daysOk) {
+        dayFlag = function (mg) {
+          return mg / d.value > EDIBLE_DAILY_LIMIT_MG + 1e-9 ? ', over daily limit' : '';
+        };
+      }
+
       if (isEdible) {
         if (dir === 'to') {
           totalMg = a.value;
           out = piecesFromMg(a.value, p.value);
-          els.resultValue.textContent = formatAmount(out);
+          rounded = wholeOptions(out, p.value, function (n) {
+            return fmt(n) + '\u00A0' + plural(n, 'piece', 'pieces');
+          }, dayFlag);
+          els.resultValue.textContent = fmt(rounded.value) + ' ' + plural(rounded.value, 'piece', 'pieces');
+          if (rounded.line) addLine(rounded.line, 'round');
           addLine(fmt(a.value, 2) + ' mg ÷ ' + formatMg(p.value) + ' per piece = ' + formatAmount(out));
         } else {
           out = mgFromPieces(a.value, p.value);
@@ -244,20 +282,40 @@
         }
       } else {
         var perG = mgPerGram(p.value);
-        addLine(fmt(p.value, 2) + '% THC = ' + fmt(perG, 1) + ' mg THC per gram');
+        var potencyLine = fmt(p.value, 2) + '% THC = ' + fmt(perG, 1) + ' mg THC per gram';
         if (dir === 'to') {
           out = gramsFromMg(a.value, p.value);
-          els.resultValue.textContent = formatAmount(out);
-          addLine(fmt(a.value, 2) + ' mg ÷ ' + fmt(perG, 1) + ' mg = ' + formatAmount(out));
+          var calcLine = fmt(a.value, 2) + ' mg ÷ ' + fmt(perG, 1) + ' mg = ' + formatAmount(out);
+          if (product === 'concentrate' && packOk) {
+            // Concentrate is dispensed in whole packs.
+            var packs = out / k.value;
+            var packLabel = function (n) {
+              return fmt(n) + '\u00A0' + plural(n, 'pack', 'packs');
+            };
+            rounded = wholeOptions(packs, perG * k.value, packLabel);
+            els.resultLabel.textContent = 'Packs of ' + fmt(k.value, 2) + ' g';
+            els.resultValue.textContent = fmt(rounded.value) + ' ' + plural(rounded.value, 'pack', 'packs');
+            if (rounded.line) addLine(rounded.line, 'round');
+            addLine(potencyLine);
+            addLine(calcLine);
+            addLine(fmt(out) + ' g ÷ ' + fmt(k.value, 2) + ' g per pack = ' + fmt(packs) + ' ' + plural(packs, 'pack', 'packs'));
+          } else {
+            rounded = wholeOptions(out, perG, function (n) { return fmt(n) + '\u00A0g'; });
+            els.resultLabel.textContent = cfg.resultLabel;
+            els.resultValue.textContent = fmt(rounded.value) + ' g';
+            if (rounded.line) addLine(rounded.line, 'round');
+            addLine(potencyLine);
+            addLine(calcLine);
+          }
         } else {
           out = mgFromGrams(a.value, p.value);
           els.resultValue.textContent = formatMg(out);
+          addLine(potencyLine);
           addLine(fmt(a.value, 2) + ' g × ' + fmt(perG, 1) + ' mg = ' + formatMg(out));
-        }
-        if (product === 'concentrate' && packOk) {
-          var grams = dir === 'to' ? out : a.value;
-          var packs = grams / k.value;
-          addLine(fmt(grams) + ' g = ' + fmt(packs, 1) + ' ' + plural(packs, 'pack', 'packs') + ' of ' + fmt(k.value, 2) + ' g');
+          if (product === 'concentrate' && packOk) {
+            var revPacks = a.value / k.value;
+            addLine(fmt(a.value) + ' g = ' + fmt(revPacks, 1) + ' ' + plural(revPacks, 'pack', 'packs') + ' of ' + fmt(k.value, 2) + ' g');
+          }
         }
       }
     } else {

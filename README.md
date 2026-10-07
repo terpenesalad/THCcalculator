@@ -37,6 +37,7 @@ The calculator flags edible amounts above **40 mg THC per day**. That limit is s
 - mg THC → grams (or pieces), and back
 - Hash/concentrate: shows how many packs that is (pack size defaults to 1 g)
 - Edibles: works out mg per day over a period and warns above 40 mg/day
+- Results are whole numbers (grams, packs, pieces), with the exact figure and both round-down and round-up options shown in mg
 - Shows the working for each calculation
 - Accepts input like `15,000`, `15000mg` or `25%`
 - Light and dark mode (remembers your choice)

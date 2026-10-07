@@ -244,6 +244,11 @@ button, input {
 
 .working p { margin: 0; }
 
+.working .round {
+  color: var(--fg);
+  margin-bottom: 8px;
+}
+
 .working .alert {
   margin-top: 8px;
   padding-left: 10px;
