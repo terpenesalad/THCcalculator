@@ -29,7 +29,7 @@ The result covers the same period as the amount entered (15,000 mg per month at 
 - Light and dark mode (remembers your choice)
 - Built for phones as well as desktop: adapts to any screen size, finger-sized buttons, number keypad on iPhone and Android, and can be added to the home screen like an app
 - The address bar keeps the current inputs, so a calculation can be shared as a link, e.g. `?amount=15000&potency=25`
-- Plain HTML, CSS and JavaScript. No build step, no tracking, works offline once loaded
+- Plain HTML, CSS and JavaScript. No build step, no tracking
 
 ## Running locally
 
