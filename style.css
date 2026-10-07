@@ -1,0 +1,266 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --muted: #666666;
+  --line: #d9d9d9;
+  --field: #ffffff;
+  --soft: #f4f4f4;
+  --warn: #9a5b00;
+  --error: #b42318;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #141414;
+  --fg: #ececec;
+  --muted: #9b9b9b;
+  --line: #333333;
+  --field: #1c1c1c;
+  --soft: #1f1f1f;
+  --warn: #e0a43a;
+  --error: #f47a6e;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.wrap {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 32px 16px 48px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+h1 {
+  font-size: 1.375rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+h2 {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+
+.lede {
+  color: var(--muted);
+  margin: 8px 0 24px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.theme-btn {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-size: 0.875rem;
+  min-height: 32px;
+}
+
+.theme-btn:hover { border-color: var(--muted); }
+
+:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+
+/* Mode switch */
+.modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.modes button {
+  background: none;
+  border: 0;
+  padding: 10px 8px;
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+.modes button + button { border-left: 1px solid var(--line); }
+
+.modes button[aria-selected="true"] {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* Fields */
+.calc {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field { min-width: 0; }
+
+.field label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.input {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--field);
+}
+
+.input:focus-within { border-color: var(--fg); }
+
+.input input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  font-size: 1.125rem;
+  padding: 10px 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.input input:focus { outline: none; }
+.input input::placeholder { color: var(--muted); opacity: 0.6; }
+
+.unit {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  color: var(--muted);
+  border-left: 1px solid var(--line);
+  font-size: 0.9375rem;
+}
+
+.field.invalid .input { border-color: var(--error); }
+
+.msg {
+  min-height: 1.25em;
+  margin: 4px 0 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.msg.error { color: var(--error); }
+.msg.warn { color: var(--warn); }
+
+/* Result */
+.result {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 20px 0;
+  margin: 8px 0 32px;
+}
+
+.result-label {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.result-value {
+  margin: 2px 0 0;
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  word-break: break-word;
+}
+
+.working {
+  margin-top: 12px;
+  font-size: 0.9375rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.working p { margin: 0; }
+
+/* Table */
+.table-wrap { margin-bottom: 32px; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9375rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+th {
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+th:last-child, td:last-child { text-align: right; }
+tr.current td {
+  font-weight: 600;
+  background: var(--soft);
+}
+
+
+/* How it works */
+.how {
+  font-size: 0.9375rem;
+  margin-bottom: 32px;
+}
+
+.how p { margin: 0 0 6px; }
+.how .eg, .how .note { color: var(--muted); }
+.how .eg { margin-top: 12px; }
+
+.foot {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.foot p { margin: 0; }
+
+@media (max-width: 420px) {
+  .wrap { padding-top: 24px; }
+  .calc { grid-template-columns: 1fr; gap: 4px; }
+  .result-value { font-size: 2rem; }
+  .modes button { font-size: 0.875rem; }
+}
