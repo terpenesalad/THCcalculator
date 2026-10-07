@@ -24,7 +24,6 @@ The result covers the same period as the amount entered (15,000 mg per month at 
 
 - mg THC → grams of flower, and grams → mg THC
 - Shows the working for each calculation
-- Table of the same amount at common potencies (10–35%)
 - Accepts input like `15,000`, `15000mg` or `25%`
 - Light and dark mode (remembers your choice)
 - Built for phones as well as desktop: adapts to any screen size, finger-sized buttons, number keypad on iPhone and Android, and can be added to the home screen like an app

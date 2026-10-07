@@ -61,15 +61,6 @@ h1 {
   margin: 0;
 }
 
-h2 {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--muted);
-  margin: 0 0 8px;
-}
-
 .lede {
   color: var(--muted);
   margin: 8px 0 24px;
@@ -199,7 +190,7 @@ button, input {
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   padding: 20px 0;
-  margin: 8px 0 32px;
+  margin: 8px 0 16px;
 }
 
 .result-label {
@@ -226,44 +217,13 @@ button, input {
 
 .working p { margin: 0; }
 
-/* Table */
-.table-wrap { margin-bottom: 32px; }
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-variant-numeric: tabular-nums;
+/* Formula */
+.formula {
+  margin: 0 0 24px;
   font-size: 0.9375rem;
-}
-
-th, td {
-  text-align: left;
-  padding: 7px 8px;
-  border-bottom: 1px solid var(--line);
-}
-
-th {
-  font-weight: 600;
-  font-size: 0.8125rem;
   color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
-
-th:last-child, td:last-child { text-align: right; }
-tr.current td {
-  font-weight: 600;
-  background: var(--soft);
-}
-
-
-/* How it works */
-.how {
-  font-size: 0.9375rem;
-  margin-bottom: 32px;
-}
-
-.how p { margin: 0 0 6px; }
-.how .eg, .how .note { color: var(--muted); }
-.how .eg { margin-top: 12px; }
 
 .foot {
   border-top: 1px solid var(--line);
@@ -288,16 +248,9 @@ tr.current td {
   .unit { padding: 0 10px; }
 
   .calc { gap: 12px; }
-  .result { padding: 16px 0; margin: 4px 0 28px; }
+  .result { padding: 16px 0; margin: 4px 0 14px; }
   .result-value { font-size: 2.25rem; }
   .working { font-size: 0.875rem; }
-
-  th, td { padding: 10px 6px; }
-  th:first-child, td:first-child { padding-left: 8px; }
-  th:last-child, td:last-child { padding-right: 8px; }
-  table { font-size: 0.9375rem; }
-
-  .how { font-size: 0.875rem; }
 }
 
 /* Very narrow phones: stack the two inputs */
@@ -305,7 +258,6 @@ tr.current td {
   .calc { grid-template-columns: 1fr; gap: 0; }
   .modes button { font-size: 0.8125rem; padding: 8px 4px; }
   .result-value { font-size: 2rem; }
-  th, td { padding: 9px 4px; font-size: 0.875rem; }
 }
 
 /* Any touch screen (tablets included): keep tap targets finger-sized */

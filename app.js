@@ -37,8 +37,6 @@
 
   // ---------- UI ----------
 
-  var TABLE_POTENCIES = [10, 15, 18, 20, 22, 25, 28, 30, 35];
-
   var $ = function (id) { return document.getElementById(id); };
   var els = {
     form: $('calc'),
@@ -51,10 +49,6 @@
     resultLabel: $('result-label'),
     resultValue: $('result-value'),
     working: $('working'),
-    tableWrap: $('table-wrap'),
-    tableTitle: $('table-title'),
-    tableCol: $('table-col'),
-    tableBody: $('table-body'),
     tabs: Array.prototype.slice.call(document.querySelectorAll('.modes [role="tab"]')),
     theme: $('theme')
   };
@@ -68,14 +62,14 @@
       amountUnit: 'mg',
       placeholder: '15,000',
       resultLabel: 'Grams of flower',
-      tableCol: 'Grams of flower'
+      formula: 'Grams = mg THC \u00F7 (potency % \u00D7 10)'
     },
     'g-to-mg': {
       amountLabel: 'Flower',
       amountUnit: 'g',
       placeholder: '60',
       resultLabel: 'Total THC',
-      tableCol: 'Total THC'
+      formula: 'mg THC = grams \u00D7 (potency % \u00D7 10)'
     }
   };
 
@@ -156,30 +150,6 @@
       els.working.appendChild(hint);
     }
 
-    // Reference table
-    els.tableBody.innerHTML = '';
-    if (amountOk) {
-      var list = TABLE_POTENCIES.slice();
-      if (potencyOk && list.indexOf(p.value) === -1) {
-        list.push(p.value);
-        list.sort(function (x, y) { return x - y; });
-      }
-      list.forEach(function (pct) {
-        var tr = document.createElement('tr');
-        if (potencyOk && pct === p.value) tr.className = 'current';
-        [fmt(pct, 2) + '%', fmt(mgPerGram(pct), 1) + ' mg', formatResult(convert(a.value, pct))].forEach(function (t) {
-          var td = document.createElement('td');
-          td.textContent = t;
-          tr.appendChild(td);
-        });
-        els.tableBody.appendChild(tr);
-      });
-      els.tableTitle.textContent = fmt(a.value, 2) + ' ' + cfg.amountUnit + ' at other potencies';
-      els.tableWrap.hidden = false;
-    } else {
-      els.tableWrap.hidden = true;
-    }
-
     updateUrl();
   }
 
@@ -197,7 +167,7 @@
     els.amountUnit.textContent = cfg.amountUnit;
     els.amount.placeholder = cfg.placeholder;
     els.resultLabel.textContent = cfg.resultLabel;
-    els.tableCol.textContent = cfg.tableCol;
+    document.getElementById('formula').textContent = cfg.formula;
     els.amount.value = savedAmounts[mode];
     render();
   }
