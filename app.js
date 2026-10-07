@@ -103,6 +103,9 @@
     potencyUnit: $('potency-unit'),
     potencyMsg: $('potency-msg'),
     days: $('days'),
+    pack: $('pack'),
+    packField: $('pack-field'),
+    packMsg: $('pack-msg'),
     daysField: $('days-field'),
     daysMsg: $('days-msg'),
     dirTo: $('dir-to'),
@@ -189,6 +192,19 @@
 
     var potencyOk = checkStrength(p, potencyField);
 
+    var packOk = false;
+    var k = parseNumber(els.pack.value);
+    if (product === 'concentrate') {
+      if (k.empty) {
+        setMsg(els.packMsg, els.packField, '');
+      } else if (k.invalid || k.value <= 0) {
+        setMsg(els.packMsg, els.packField, 'Enter the grams per pack, e.g. 1', 'error');
+      } else {
+        setMsg(els.packMsg, els.packField, '');
+        packOk = true;
+      }
+    }
+
     var daysOk = false;
     if (isEdible) {
       if (d.empty) {
@@ -237,6 +253,11 @@
           out = mgFromGrams(a.value, p.value);
           els.resultValue.textContent = formatMg(out);
           addLine(fmt(a.value, 2) + ' g × ' + fmt(perG, 1) + ' mg = ' + formatMg(out));
+        }
+        if (product === 'concentrate' && packOk) {
+          var grams = dir === 'to' ? out : a.value;
+          var packs = grams / k.value;
+          addLine(fmt(grams) + ' g = ' + fmt(packs, 1) + ' ' + plural(packs, 'pack', 'packs') + ' of ' + fmt(k.value, 2) + ' g');
         }
       }
     } else {
@@ -288,8 +309,9 @@
     els.potencyLabel.textContent = cfg.strengthLabel;
     els.potencyUnit.textContent = cfg.strengthUnit;
     els.potency.placeholder = cfg.strengthPlaceholder;
-    els.potency.setAttribute('enterkeyhint', isEdible ? 'next' : 'done');
+    els.potency.setAttribute('enterkeyhint', product === 'flower' ? 'done' : 'next');
     els.daysField.hidden = !isEdible;
+    els.packField.hidden = product !== 'concentrate';
 
     if (isEdible) {
       els.formula.textContent = dir === 'to'
@@ -329,6 +351,7 @@
     if (els.amount.value.trim()) params.set('amount', els.amount.value.trim());
     if (els.potency.value.trim()) params.set('potency', els.potency.value.trim());
     if (product === 'edible' && els.days.value.trim() && els.days.value.trim() !== '30') params.set('days', els.days.value.trim());
+    if (product === 'concentrate' && els.pack.value.trim() && els.pack.value.trim() !== '1') params.set('pack', els.pack.value.trim());
     var qs = params.toString();
     try { history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '')); } catch (e) {}
   }
@@ -342,6 +365,7 @@
     if (params.get('amount')) saved.amount[amountKey()] = params.get('amount');
     if (params.get('potency')) saved.potency[product] = params.get('potency');
     if (params.get('days')) els.days.value = params.get('days');
+    if (params.get('pack')) els.pack.value = params.get('pack');
   }
 
   // Theme
@@ -368,6 +392,7 @@
   els.amount.addEventListener('input', render);
   els.potency.addEventListener('input', render);
   els.days.addEventListener('input', render);
+  els.pack.addEventListener('input', render);
   els.form.addEventListener('submit', function (e) { e.preventDefault(); });
 
   // Phone keyboards: "Next" moves to the next box; "Done" closes the keyboard
@@ -385,7 +410,12 @@
   els.potency.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter') return;
     e.preventDefault();
-    if (product === 'edible') els.days.focus(); else finish(els.potency);
+    if (product === 'edible') els.days.focus();
+    else if (product === 'concentrate') els.pack.focus();
+    else finish(els.potency);
+  });
+  els.pack.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); finish(els.pack); }
   });
   els.days.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') { e.preventDefault(); finish(els.days); }
